@@ -69,8 +69,8 @@ export function CommandMenu() {
                   }
                 >
                   <ChannelLogo name={channel.name} src={channel.logo} className="size-6" />
-                  <span className="truncate">{channel.name}</span>
-                  <span className="ml-auto text-xs text-muted-foreground">
+                  <span className="flex-1 truncate">{channel.name}</span>
+                  <span className="text-xs text-muted-foreground">
                     {lookups?.countries.get(channel.country)?.flag}
                   </span>
                 </CommandItem>

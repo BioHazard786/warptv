@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { ChannelGrid } from '@/components/channel/channel-grid'
 import { EmptyChannels } from '@/components/channel/empty-channels'
 import { FacetFilter } from '@/components/channel/facet-filter'
+import { Band, BandHeading } from '@/components/layout/band'
 import { Button } from '@/components/ui/button'
 import { Field, FieldLabel } from '@/components/ui/field'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
@@ -98,7 +99,10 @@ function ChannelsPage() {
   )
 
   return (
-    <div className="flex flex-col gap-4">
+    <Band tone="shop" className="gap-5">
+      <BandHeading as="h1" title="Every Channel.">
+        Thousands of free streams. <b>Filter like you mean it.</b>
+      </BandHeading>
       <div className="flex flex-wrap items-center gap-2">
         <InputGroup className="w-full sm:max-w-xs">
           <InputGroupAddon>
@@ -165,9 +169,9 @@ function ChannelsPage() {
       </div>
 
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-lg font-bold">
           {channels ? (
-            `${channels.length.toLocaleString()} channels`
+            `${channels.length.toLocaleString()} channels!`
           ) : (
             <span className="shimmer">Loading…</span>
           )}
@@ -203,7 +207,7 @@ function ChannelsPage() {
       {!channels ? (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-6">
           {Array.from({ length: 12 }, (_, i) => (
-            <Skeleton key={i} className="h-44 rounded-3xl" />
+            <Skeleton key={i} className="h-44" />
           ))}
         </div>
       ) : channels.length === 0 ? (
@@ -217,6 +221,6 @@ function ChannelsPage() {
       ) : (
         <ChannelGrid channels={channels} view={view} />
       )}
-    </div>
+    </Band>
   )
 }

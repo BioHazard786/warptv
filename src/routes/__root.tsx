@@ -1,6 +1,7 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import {
   HeadContent,
+  Link,
   Outlet,
   Scripts,
   createRootRouteWithContext,
@@ -12,17 +13,13 @@ import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { Band, BandHeading } from "@/components/layout/band";
 import { CommandMenu } from "@/components/layout/command-menu";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SyncGate } from "@/components/layout/sync-gate";
 import { ThemeProvider, themeScript } from "@/components/layout/theme-provider";
 import { PlayerHost } from "@/components/player/player-host";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -61,12 +58,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   shellComponent: RootDocument,
   component: AppLayout,
   notFoundComponent: () => (
-    <Empty className="min-h-[60vh]">
-      <EmptyHeader>
-        <EmptyTitle>Page not found</EmptyTitle>
-        <EmptyDescription>That page doesn't exist.</EmptyDescription>
-      </EmptyHeader>
-    </Empty>
+    <Band tone="hero">
+      <BandHeading as="h1" title="Lost Signal.">
+        This page <b>doesn't exist</b>. Maybe it got cancelled after one season.
+      </BandHeading>
+      <Button size="xl" className="self-start" nativeButton={false} render={<Link to="/" />}>
+        Take me home!
+      </Button>
+    </Band>
   ),
 });
 
@@ -79,11 +78,12 @@ function AppLayout() {
             <AppSidebar />
             <SidebarInset>
               <SiteHeader />
-              <main className="flex flex-1 flex-col p-4 md:p-6">
+              {/* Pages are stacks of bands, the last one stretches to the bottom of the screen. */}
+              <div data-page className="flex flex-1 flex-col [&>section:last-child]:flex-1">
                 <SyncGate>
                   <Outlet />
                 </SyncGate>
-              </main>
+              </div>
             </SidebarInset>
             <PlayerHost />
             <CommandMenu />

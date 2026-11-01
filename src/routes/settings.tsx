@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useRef } from 'react'
+import { Band, BandHeading } from '@/components/layout/band'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field'
@@ -25,12 +26,14 @@ function Settings() {
   const fileInput = useRef<HTMLInputElement>(null)
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-      <h1 className="text-2xl font-semibold">Settings</h1>
+    <Band tone="specs" className="max-w-3xl">
+      <BandHeading as="h1" title="Knobs & Dials.">
+        Tweak how WarpTV behaves. <b>Everything stays in this browser.</b>
+      </BandHeading>
 
       <Card>
         <CardHeader>
-          <CardTitle>Preferences</CardTitle>
+          <CardTitle>Preferences.</CardTitle>
         </CardHeader>
         <CardContent>
           <FieldGroup>
@@ -70,8 +73,8 @@ function Settings() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Data</CardTitle>
-          <CardDescription>Everything is stored in this browser. Nothing is sent to a server.</CardDescription>
+          <CardTitle>Your Data.</CardTitle>
+          <CardDescription>It's all stored right here. Nothing is sent to a server, ever.</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button
@@ -123,6 +126,6 @@ function Settings() {
           />
         </CardContent>
       </Card>
-    </div>
+    </Band>
   )
 }

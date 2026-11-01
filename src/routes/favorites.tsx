@@ -3,6 +3,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ChannelGrid } from '@/components/channel/channel-grid'
 import { EmptyChannels } from '@/components/channel/empty-channels'
+import { Band, BandHeading } from '@/components/layout/band'
 import { Button } from '@/components/ui/button'
 import { db } from '@/lib/catalog/db'
 import { channelsByIdsQuery } from '@/lib/catalog/queries'
@@ -22,15 +23,17 @@ function Favorites() {
   })
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">Favorites</h1>
+    <Band tone="club">
+      <BandHeading as="h1" title="Your Faves.">
+        Every channel you hearted, <b>all in one place</b>.
+      </BandHeading>
       {channels?.length === 0 ? (
-        <EmptyChannels title="No favorites yet" description="Tap the heart on any channel to keep it here.">
-          <Button nativeButton={false} render={<Link to="/channels" />}>Browse channels</Button>
+        <EmptyChannels title="Nothing Hearted." description="Tap the heart on any channel and it moves in here.">
+          <Button size="lg" nativeButton={false} render={<Link to="/channels" />}>Go find some!</Button>
         </EmptyChannels>
       ) : (
         channels && <ChannelGrid channels={channels} view={view} />
       )}
-    </div>
+    </Band>
   )
 }

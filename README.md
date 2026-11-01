@@ -54,3 +54,9 @@ The proxy only fetches URLs listed in the iptv-org catalog (or URLs it signed it
 rewriting a playlist), refuses private network addresses, and streams segments through.
 It counts against your host's bandwidth and function limits, so it is opt-in. Without it these
 streams show "Copy URL" and "Open in VLC" instead.
+
+## Disclaimer
+
+WarpTV does not own, produce, host, archive, or distribute any of the video content, streams, or television broadcasts accessible through this application. All channel data, logos, and stream links are sourced directly from the public, community-maintained [iptv-org](https://github.com/iptv-org/iptv) project.
+
+All streams are freely accessible on the open web and belong to their respective copyright owners and broadcasting networks. WarpTV is strictly a client-side catalog browser and media player interface.

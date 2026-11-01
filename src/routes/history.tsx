@@ -4,6 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { useMemo } from 'react'
 import { ChannelCard } from '@/components/channel/channel-card'
 import { EmptyChannels } from '@/components/channel/empty-channels'
+import { Band, BandHeading } from '@/components/layout/band'
 import { Button } from '@/components/ui/button'
 import { Marker, MarkerContent } from '@/components/ui/marker'
 import { db } from '@/lib/catalog/db'
@@ -46,26 +47,31 @@ function History() {
   }, [rows, channels])
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">History</h1>
-        {!!rows?.length && (
-          <Button variant="outline" onClick={() => void db.history.clear()}>
-            Clear history
-          </Button>
-        )}
-      </div>
+    <Band tone="story">
+      <BandHeading
+        as="h1"
+        title="Watched Lately."
+        action={
+          !!rows?.length && (
+            <Button variant="outline" size="lg" onClick={() => void db.history.clear()}>
+              Wipe it clean
+            </Button>
+          )
+        }
+      >
+        Your channel-surfing trail. <b>It never leaves this device.</b>
+      </BandHeading>
       {rows?.length === 0 ? (
-        <EmptyChannels title="Nothing watched yet" description="Channels you watch show up here.">
-          <Button nativeButton={false} render={<Link to="/channels" />}>
-            Browse channels
+        <EmptyChannels title="Nothing Yet." description="Watch something and it shows up here.">
+          <Button size="lg" nativeButton={false} render={<Link to="/channels" />}>
+            Start surfing!
           </Button>
         </EmptyChannels>
       ) : (
         groups.map((group) => (
           <section key={group.label} className="flex flex-col gap-3">
             <Marker variant="separator">
-              <MarkerContent>{group.label}</MarkerContent>
+              <MarkerContent className="text-lg font-extrabold text-foreground">{group.label}</MarkerContent>
             </Marker>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
               {group.channels.map((channel) => (
@@ -75,6 +81,6 @@ function History() {
           </section>
         ))
       )}
-    </div>
+    </Band>
   )
 }

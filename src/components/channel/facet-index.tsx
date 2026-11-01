@@ -2,6 +2,8 @@ import { IconSearch } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
+import { Band, BandHeading } from '@/components/layout/band'
+import type { BandTone } from '@/components/layout/band'
 import { Badge } from '@/components/ui/badge'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Item, ItemActions, ItemContent, ItemGroup, ItemMedia, ItemTitle } from '@/components/ui/item'
@@ -16,7 +18,17 @@ type Kind = 'countries' | 'categories' | 'languages'
 const searchKey = { countries: 'country', categories: 'category', languages: 'language' } as const
 
 /** Lists every country, category or language that has channels, linking into the browse page. */
-export function FacetIndex({ kind, title }: { kind: Kind; title: string }) {
+export function FacetIndex({
+  kind,
+  title,
+  tone,
+  blurb,
+}: {
+  kind: Kind
+  title: string
+  tone: BandTone
+  blurb: React.ReactNode
+}) {
   const hideNsfw = usePreferences((s) => s.hideNsfw)
   const { data, isPending } = useQuery(facetsQuery(hideNsfw))
   const lookups = useLookups()
@@ -35,8 +47,10 @@ export function FacetIndex({ kind, title }: { kind: Kind; title: string }) {
   }, [data, kind, lookups, filter])
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
-      <h1 className="text-2xl font-semibold">{title}</h1>
+    <Band tone={tone} className="max-w-3xl gap-5">
+      <BandHeading as="h1" title={`${title}.`}>
+        {blurb}
+      </BandHeading>
       <InputGroup>
         <InputGroupAddon>
           <IconSearch />
@@ -52,23 +66,25 @@ export function FacetIndex({ kind, title }: { kind: Kind; title: string }) {
           {rows.map((row) => (
             <Item
               key={row.value}
+              data-band="paper"
               variant="outline"
               size="sm"
+              className="rounded-(--card-radius) border-ink bg-background text-foreground"
               render={<Link to="/channels" search={{ [searchKey[kind]]: [row.value] }} />}
             >
               {kind === 'countries' && (
                 <ItemMedia className="text-xl">{lookups?.countries.get(row.value)?.flag}</ItemMedia>
               )}
               <ItemContent>
-                <ItemTitle>{row.label}</ItemTitle>
+                <ItemTitle className="font-extrabold">{row.label}</ItemTitle>
               </ItemContent>
               <ItemActions>
-                <Badge variant="secondary">{row.count}</Badge>
+                <Badge variant="pixel">{row.count}</Badge>
               </ItemActions>
             </Item>
           ))}
         </ItemGroup>
       )}
-    </div>
+    </Band>
   )
 }

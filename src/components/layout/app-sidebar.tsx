@@ -31,15 +31,15 @@ import { Link, useRouterState } from "@tanstack/react-router";
 
 const browse = [
   { to: "/", label: "Home", icon: IconHome },
-  { to: "/channels", label: "All channels", icon: IconBroadcast },
+  { to: "/channels", label: "Every channel", icon: IconBroadcast },
   { to: "/countries", label: "Countries", icon: IconWorld },
   { to: "/categories", label: "Categories", icon: IconTags },
   { to: "/languages", label: "Languages", icon: IconLanguage },
 ] as const;
 
 const library = [
-  { to: "/favorites", label: "Favorites", icon: IconHeart },
-  { to: "/history", label: "History", icon: IconHistory },
+  { to: "/favorites", label: "Faves", icon: IconHeart },
+  { to: "/history", label: "Watched", icon: IconHistory },
   { to: "/settings", label: "Settings", icon: IconSettings },
 ] as const;
 
@@ -63,20 +63,25 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader data-band="story">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" render={<Link to="/" />}>
-              <IconDeviceTv />
-              <span className="text-base font-semibold">WarpTV</span>
+            <SidebarMenuButton size="lg" className="hover:bg-transparent" render={<Link to="/" />}>
+              <IconDeviceTv className="size-7!" />
+              <span className="flex items-center gap-1 text-3xl font-extrabold tracking-tight">
+                Warp
+                <span className="rotate-(--sticker-tilt) rounded-[4px] bg-black px-1.5 py-0.5 text-lg leading-none text-white">
+                  TV
+                </span>
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent data-band="story">
         {[
-          { label: "Browse", items: browse },
-          { label: "Library", items: library },
+          { label: "Browse.", items: browse },
+          { label: "Your stuff.", items: library },
         ].map((group) => (
           <SidebarGroup key={group.label}>
             <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
@@ -98,10 +103,10 @@ export function AppSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarFooter>
-        <div className="flex items-center justify-between gap-2 px-2 text-xs text-muted-foreground">
+      <SidebarFooter data-band="story">
+        <div className="flex items-center justify-between gap-2 px-2 text-sm font-medium text-muted-foreground">
           <span className={syncing ? "shimmer" : undefined}>
-            {syncing ? "Syncing catalog…" : `Synced ${formatAge(lastSyncedAt)}`}
+            {syncing ? "Fetching channels…" : `Synced ${formatAge(lastSyncedAt)}`}
           </span>
           <Button
             variant="ghost"

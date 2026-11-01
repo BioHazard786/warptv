@@ -9,7 +9,7 @@ export function FavoriteButton({
 }: {
   channelId: string
   size?: 'icon-sm' | 'icon' | 'icon-lg'
-  variant?: 'ghost' | 'outline'
+  variant?: 'ghost' | 'outline' | 'secondary'
 }) {
   const isFavorite = useFavorites((s) => s.ids.has(channelId))
 

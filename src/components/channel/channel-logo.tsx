@@ -19,17 +19,17 @@ export function ChannelLogo({
   className?: string
 }) {
   return (
-    <Avatar className={cn('size-12 rounded-xl after:rounded-xl', className)}>
+    <Avatar className={cn('size-12 rounded-lg after:rounded-lg', className)}>
       {src && (
         <AvatarImage
           src={src}
           alt=""
           loading="lazy"
           referrerPolicy="no-referrer"
-          className="rounded-xl object-contain p-1"
+          className="rounded-lg object-contain p-1"
         />
       )}
-      <AvatarFallback className="rounded-xl">{initials(name)}</AvatarFallback>
+      <AvatarFallback className="rounded-lg font-pixel text-xs">{initials(name)}</AvatarFallback>
     </Avatar>
   )
 }

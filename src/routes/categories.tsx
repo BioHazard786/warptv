@@ -3,5 +3,7 @@ import { FacetIndex } from '@/components/channel/facet-index'
 
 export const Route = createFileRoute('/categories')({
   head: () => ({ meta: [{ title: 'Categories · WarpTV' }] }),
-  component: () => <FacetIndex kind="categories" title="Categories" />,
+  component: () => (
+    <FacetIndex kind="categories" title="Categories" tone="pop" blurb={<>Sorted by vibe. <b>Pick one and dive in.</b></>} />
+  ),
 })

@@ -1,38 +1,45 @@
+import { IconArrowRight } from '@tabler/icons-react'
 import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { Band, BandHeading } from '@/components/layout/band'
+import type { BandTone } from '@/components/layout/band'
 import { Button } from '@/components/ui/button'
 import type { ChannelRow } from '@/lib/catalog/types'
 import { ChannelCard } from './channel-card'
 
+/** A band of game cards with a short heading. Renders nothing when there's nothing to show. */
 export function ChannelSection({
   title,
+  tone,
   channels,
   action,
+  children,
 }: {
   title: string
+  tone: BandTone
   channels: ChannelRow[]
   action?: ReactNode
+  children?: ReactNode
 }) {
   if (channels.length === 0) return null
   return (
-    <section className="flex flex-col gap-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium">{title}</h2>
-        {action}
-      </div>
+    <Band tone={tone}>
+      <BandHeading title={title} action={action}>
+        {children}
+      </BandHeading>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
         {channels.map((channel) => (
           <ChannelCard key={channel.id} channel={channel} />
         ))}
       </div>
-    </section>
+    </Band>
   )
 }
 
 export function ViewAll({ to }: { to: '/favorites' | '/history' }) {
   return (
-    <Button variant="ghost" size="sm" nativeButton={false} render={<Link to={to} />}>
-      View all
+    <Button size="lg" nativeButton={false} render={<Link to={to} />}>
+      See them all <IconArrowRight data-icon="inline-end" />
     </Button>
   )
 }

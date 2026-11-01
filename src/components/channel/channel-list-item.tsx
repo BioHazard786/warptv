@@ -17,22 +17,24 @@ export function ChannelListItem({ channel }: { channel: ChannelRow }) {
 
   return (
     <Item
+      data-band="paper"
       variant="outline"
       size="sm"
+      className="rounded-(--card-radius) border-ink bg-background text-foreground"
       render={<Link to="/channels/$channelId" params={{ channelId: channel.id }} />}
     >
       <ItemMedia>
         <ChannelLogo name={channel.name} src={channel.logo} />
       </ItemMedia>
       <ItemContent>
-        <ItemTitle>{channel.name}</ItemTitle>
+        <ItemTitle className="font-extrabold">{channel.name}</ItemTitle>
         <ItemDescription>
           {country ? `${country.flag} ${country.name}` : channel.country}
           {categories && ` · ${categories}`}
         </ItemDescription>
       </ItemContent>
       <ItemActions>
-        {quality && <Badge variant="secondary">{quality}</Badge>}
+        {quality && <Badge variant="pixel">{quality}</Badge>}
         <FavoriteButton channelId={channel.id} />
       </ItemActions>
     </Item>

@@ -2,7 +2,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import "@fontsource-variable/onest";
+@import "@fontsource/silkscreen/400.css";
+@import "@fontsource/silkscreen/700.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -22,7 +24,20 @@ body {
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: 'Onest Variable', 'Roobert', Helvetica, sans-serif;
+  --font-pixel: 'Silkscreen', ui-monospace, monospace;
+  --default-transition-duration: 250ms;
+  --default-transition-timing-function: ease-in-out;
+  /* Hard ink ledges instead of soft shadows; overlays get an ink outline on top. */
+  --shadow-sm: 0 2px 0 0 var(--ledge);
+  --shadow-md: 0 4px 0 0 var(--ledge);
+  --shadow-lg: 0 0 0 2px var(--ledge), 0 6px 0 2px var(--ledge);
+  --shadow-xl: 0 0 0 2px var(--ledge), 0 8px 0 2px var(--ledge);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-buy: var(--buy);
+  --color-buy-foreground: var(--buy-ink);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -139,73 +154,353 @@ body {
   --spacing-media-hidden-seek-offset: var(--media-hidden-seek-offset);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.457 0.24 277.023);
-  --primary-foreground: oklch(0.962 0.018 272.314);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.785 0.115 274.713);
-  --chart-2: oklch(0.585 0.233 277.117);
-  --chart-3: oklch(0.511 0.262 276.966);
-  --chart-4: oklch(0.457 0.24 277.023);
-  --chart-5: oklch(0.398 0.195 277.366);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.511 0.262 276.966);
-  --sidebar-primary-foreground: oklch(0.962 0.018 272.314);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+/*
+ * Slaydate (DESIGN.md). Every scheme declares the same palette: six full-bleed bands, each
+ * with its own ink and button colour, the sheet that overlays sit on, the 1-bit card paper
+ * and ink, the input field and the glossy "buy" colour. `data-band` maps a band onto the
+ * shadcn tokens below, so a component follows whichever band it sits in.
+ * `data-theme-swatch` scopes a palette to one element, for the theme picker's previews.
+ */
+:root,
+[data-theme-swatch="original"] {
+  --hero: #7a8085;
+  --hero-ink: #ffffff;
+  --hero-btn: #312f28;
+  --hero-btn-ink: #ffffff;
+  --story: #ffc833;
+  --story-ink: #312f28;
+  --story-btn: #312f28;
+  --story-btn-ink: #ffffff;
+  --club: #21c6a9;
+  --club-ink: #000000;
+  --club-btn: #127866;
+  --club-btn-ink: #ffffff;
+  --shop: #efefef;
+  --shop-ink: #000000;
+  --shop-btn: #6c00ff;
+  --shop-btn-ink: #ffffff;
+  --specs: #212223;
+  --specs-ink: #ffffff;
+  --specs-btn: #6c00ff;
+  --specs-btn-ink: #ffffff;
+  --pop: #6c00ff;
+  --pop-ink: #ffffff;
+  --pop-btn: #ffc833;
+  --pop-btn-ink: #000000;
+  --sheet: #e8e4da;
+  --sheet-ink: #312f28;
+  --sheet-btn: #312f28;
+  --sheet-btn-ink: #ffffff;
+  --paper: #e8e4da;
+  --ink: #312f28;
+  --field: #efefef;
+  --field-ink: #000000;
+  --buy: #6c00ff;
+  --buy-ink: #ffffff;
+  --deep: #ffb000;
+  --danger: #dc2626;
+  --danger-ink: #ffffff;
+  --ledge: #312f28;
+  color-scheme: light;
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.398 0.195 277.366);
-  --primary-foreground: oklch(0.962 0.018 272.314);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.785 0.115 274.713);
-  --chart-2: oklch(0.585 0.233 277.117);
-  --chart-3: oklch(0.511 0.262 276.966);
-  --chart-4: oklch(0.457 0.24 277.023);
-  --chart-5: oklch(0.398 0.195 277.366);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.585 0.233 277.117);
-  --sidebar-primary-foreground: oklch(0.962 0.018 272.314);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+/* Crank Night. */
+.dark,
+[data-theme-swatch="crank-night"] {
+  --hero: #2b2d31;
+  --hero-ink: #ffffff;
+  --hero-btn: #ffc833;
+  --hero-btn-ink: #1d1c18;
+  --story: #ffc833;
+  --story-ink: #1d1c18;
+  --story-btn: #1d1c18;
+  --story-btn-ink: #ffc833;
+  --club: #00a88a;
+  --club-ink: #000000;
+  --club-btn: #1d1c18;
+  --club-btn-ink: #ffffff;
+  --shop: #383a3d;
+  --shop-ink: #ffffff;
+  --shop-btn: #ff6c42;
+  --shop-btn-ink: #1d1c18;
+  --specs: #1d1c18;
+  --specs-ink: #ffffff;
+  --specs-btn: #ff6c42;
+  --specs-btn-ink: #1d1c18;
+  --pop: #ff6c42;
+  --pop-ink: #1d1c18;
+  --pop-btn: #1d1c18;
+  --pop-btn-ink: #ffffff;
+  --sheet: #383a3d;
+  --sheet-ink: #ffffff;
+  --sheet-btn: #ff6c42;
+  --sheet-btn-ink: #1d1c18;
+  --paper: #e9e7e1;
+  --ink: #1d1c18;
+  --field: #efefef;
+  --field-ink: #000000;
+  --buy: #ff6c42;
+  --buy-ink: #1d1c18;
+  --deep: #ffb000;
+  --danger: #f87171;
+  --danger-ink: #1d1c18;
+  --ledge: #000000;
+  color-scheme: dark;
+}
+
+[data-flavor-scheme="minty"],
+[data-theme-swatch="minty"] {
+  --hero: #6f8a84;
+  --hero-ink: #ffffff;
+  --hero-btn: #1f2e28;
+  --hero-btn-ink: #ffffff;
+  --story: #a0d1ff;
+  --story-ink: #1f2e28;
+  --story-btn: #1f2e28;
+  --story-btn-ink: #ffffff;
+  --club: #c4d3cc;
+  --club-ink: #1f2e28;
+  --club-btn: #2a63a8;
+  --club-btn-ink: #ffffff;
+  --shop: #f1f6f3;
+  --shop-ink: #1f2e28;
+  --shop-btn: #2a63a8;
+  --shop-btn-ink: #ffffff;
+  --specs: #1f2e28;
+  --specs-ink: #ffffff;
+  --specs-btn: #a0d1ff;
+  --specs-btn-ink: #1f2e28;
+  --pop: #2a63a8;
+  --pop-ink: #ffffff;
+  --pop-btn: #a0d1ff;
+  --pop-btn-ink: #1f2e28;
+  --sheet: #e4ece8;
+  --sheet-ink: #1f2e28;
+  --sheet-btn: #1f2e28;
+  --sheet-btn-ink: #ffffff;
+  --paper: #e4ece8;
+  --ink: #1f2e28;
+  --field: #f7faf8;
+  --field-ink: #1f2e28;
+  --buy: #2a63a8;
+  --buy-ink: #ffffff;
+  --deep: #6fb4f2;
+  --danger: #dc2626;
+  --danger-ink: #ffffff;
+  --ledge: #1f2e28;
+  color-scheme: light;
+}
+
+[data-flavor-scheme="tomato"],
+[data-theme-swatch="tomato"] {
+  --hero: #86796f;
+  --hero-ink: #ffffff;
+  --hero-btn: #1d1c18;
+  --hero-btn-ink: #ffc833;
+  --story: #ff6c42;
+  --story-ink: #2a1a12;
+  --story-btn: #2a1a12;
+  --story-btn-ink: #ffc833;
+  --club: #ffc833;
+  --club-ink: #2a1a12;
+  --club-btn: #2a1a12;
+  --club-btn-ink: #ffffff;
+  --shop: #f3ece4;
+  --shop-ink: #2a1a12;
+  --shop-btn: #2a1a12;
+  --shop-btn-ink: #ffc833;
+  --specs: #2a1a12;
+  --specs-ink: #ffffff;
+  --specs-btn: #ff6c42;
+  --specs-btn-ink: #2a1a12;
+  --pop: #1d1c18;
+  --pop-ink: #ffc833;
+  --pop-btn: #ff6c42;
+  --pop-btn-ink: #1d1c18;
+  --sheet: #efe6dc;
+  --sheet-ink: #2a1a12;
+  --sheet-btn: #2a1a12;
+  --sheet-btn-ink: #ffc833;
+  --paper: #efe6dc;
+  --ink: #2a1a12;
+  --field: #fbf6f0;
+  --field-ink: #2a1a12;
+  --buy: #ff6c42;
+  --buy-ink: #2a1a12;
+  --deep: #e0491f;
+  --danger: #b91c1c;
+  --danger-ink: #ffffff;
+  --ledge: #2a1a12;
+  color-scheme: light;
+}
+
+[data-flavor-scheme="grape-soda"],
+[data-theme-swatch="grape-soda"] {
+  --hero: #5b5470;
+  --hero-ink: #ffffff;
+  --hero-btn: #1f1830;
+  --hero-btn-ink: #ffffff;
+  --story: #ad86e8;
+  --story-ink: #1f1830;
+  --story-btn: #1f1830;
+  --story-btn-ink: #ffffff;
+  --club: #ffc833;
+  --club-ink: #1d1c18;
+  --club-btn: #1f1830;
+  --club-btn-ink: #ffffff;
+  --shop: #f2eff7;
+  --shop-ink: #1f1830;
+  --shop-btn: #1f1830;
+  --shop-btn-ink: #ffc833;
+  --specs: #1f1830;
+  --specs-ink: #ffffff;
+  --specs-btn: #ffc833;
+  --specs-btn-ink: #1d1c18;
+  --pop: #ff6c42;
+  --pop-ink: #1d1c18;
+  --pop-btn: #1f1830;
+  --pop-btn-ink: #ffffff;
+  --sheet: #ebe6f2;
+  --sheet-ink: #1f1830;
+  --sheet-btn: #1f1830;
+  --sheet-btn-ink: #ffffff;
+  --paper: #ebe6f2;
+  --ink: #1f1830;
+  --field: #f7f5fb;
+  --field-ink: #1f1830;
+  --buy: #ffc833;
+  --buy-ink: #1d1c18;
+  --deep: #8a5fd0;
+  --danger: #dc2626;
+  --danger-ink: #ffffff;
+  --ledge: #1f1830;
+  color-scheme: light;
+}
+
+/* Overlays portal to <body>, so the page root is the sheet. */
+:root {
+  --band: var(--sheet);
+  --band-ink: var(--sheet-ink);
+  --band-btn: var(--sheet-btn);
+  --band-btn-ink: var(--sheet-btn-ink);
+  --sidebar: var(--story);
+  --sidebar-foreground: var(--story-ink);
+  --sidebar-primary: var(--story-btn);
+  --sidebar-primary-foreground: var(--story-btn-ink);
+  --sidebar-accent: color-mix(in srgb, var(--story-ink) 14%, var(--story));
+  --sidebar-accent-foreground: var(--story-ink);
+  --sidebar-border: var(--story-ink);
+  --sidebar-ring: var(--story-ink);
+  --chart-1: var(--buy);
+  --chart-2: var(--story);
+  --chart-3: var(--club);
+  --chart-4: var(--hero);
+  --chart-5: var(--ink);
+  --radius: 6px;
+  --card-radius: 2.85px;
+  --nav-rule: 3px;
+  --sticker-tilt: -8deg;
+  --device-tilt: 0deg;
+  --dither: 4px;
+  --dur: 250ms;
+  --gloss:
+    inset 0 2.5px 2.5px color-mix(in srgb, #fff 60%, transparent),
+    inset 0 -2.5px 4px color-mix(in srgb, #000 50%, transparent),
+    inset 0 -0.5px 25px color-mix(in srgb, #fff 30%, transparent),
+    0 2.5px 5px color-mix(in srgb, #000 40%, transparent);
+  --device-shade:
+    inset -8px -10px 18px var(--deep),
+    inset 6px 6px 12px color-mix(in srgb, #fff 55%, transparent),
+    0 40px 60px -24px color-mix(in srgb, #000 55%, transparent);
+}
+
+[data-band="hero"] {
+  --band: var(--hero);
+  --band-ink: var(--hero-ink);
+  --band-btn: var(--hero-btn);
+  --band-btn-ink: var(--hero-btn-ink);
+}
+[data-band="story"] {
+  --band: var(--story);
+  --band-ink: var(--story-ink);
+  --band-btn: var(--story-btn);
+  --band-btn-ink: var(--story-btn-ink);
+}
+[data-band="club"] {
+  --band: var(--club);
+  --band-ink: var(--club-ink);
+  --band-btn: var(--club-btn);
+  --band-btn-ink: var(--club-btn-ink);
+}
+[data-band="shop"] {
+  --band: var(--shop);
+  --band-ink: var(--shop-ink);
+  --band-btn: var(--shop-btn);
+  --band-btn-ink: var(--shop-btn-ink);
+}
+[data-band="specs"] {
+  --band: var(--specs);
+  --band-ink: var(--specs-ink);
+  --band-btn: var(--specs-btn);
+  --band-btn-ink: var(--specs-btn-ink);
+}
+[data-band="pop"] {
+  --band: var(--pop);
+  --band-ink: var(--pop-ink);
+  --band-btn: var(--pop-btn);
+  --band-btn-ink: var(--pop-btn-ink);
+}
+/* The 1-bit card faces and the input field. */
+[data-band="paper"] {
+  --band: var(--paper);
+  --band-ink: var(--ink);
+  --band-btn: var(--ink);
+  --band-btn-ink: var(--paper);
+}
+[data-band="ink"] {
+  --band: var(--ink);
+  --band-ink: var(--paper);
+  --band-btn: var(--paper);
+  --band-btn-ink: var(--ink);
+}
+[data-band="field"] {
+  --band: var(--field);
+  --band-ink: var(--field-ink);
+  --band-btn: var(--field-ink);
+  --band-btn-ink: var(--field);
+}
+
+:root,
+[data-band] {
+  --background: var(--band);
+  --foreground: var(--band-ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--sheet);
+  --popover-foreground: var(--sheet-ink);
+  --primary: var(--band-btn);
+  --primary-foreground: var(--band-btn-ink);
+  --secondary: color-mix(in srgb, var(--band-ink) 14%, var(--band));
+  --secondary-foreground: var(--band-ink);
+  --muted: color-mix(in srgb, var(--band-ink) 10%, var(--band));
+  --muted-foreground: color-mix(in srgb, var(--band-ink) 85%, var(--band));
+  --accent: color-mix(in srgb, var(--band-ink) 14%, var(--band));
+  --accent-foreground: var(--band-ink);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-ink);
+  --border: var(--band-ink);
+  --input: var(--band-ink);
+  --ring: var(--band-ink);
+}
+
+/* White on the hero only clears contrast at full strength. */
+[data-band="hero"] {
+  --muted-foreground: var(--hero-ink);
+}
+
+/* Danger red is tuned for the bands, cards pull it toward their ink. */
+[data-band="paper"] {
+  --destructive: color-mix(in srgb, var(--danger) 55%, var(--ink));
 }
 
 @layer base {
@@ -213,7 +508,7 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -221,6 +516,93 @@ body {
   html {
     @apply font-sans;
   }
+  b,
+  strong {
+    font-weight: 700;
+  }
+  ::selection {
+    background: var(--buy);
+    color: var(--buy-ink);
+  }
+}
+
+@layer components {
+  /* 1-bit game cards: the front shows on touch, hover or keyboard focus flips to the back. */
+  .flip-stage {
+    perspective: 900px;
+  }
+  .flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    transition: transform var(--dur) ease-in-out;
+  }
+  .flip-back {
+    transform: rotateY(180deg);
+  }
+  @media (hover: hover) {
+    .flip-card:hover .flip-front,
+    .flip-card:has(:focus-visible) .flip-front {
+      transform: rotateY(-180deg);
+    }
+    .flip-card:hover .flip-back,
+    .flip-card:has(:focus-visible) .flip-back {
+      transform: rotateY(0deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flip-face {
+      transition: none;
+    }
+  }
+}
+
+@utility text-display {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+@utility text-lead {
+  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* Body copy is set big on purpose. */
+@utility text-blurb {
+  font-size: clamp(1.25rem, 2.4vw, 1.78rem);
+  line-height: 1.3;
+}
+
+/* The one glossy pill. */
+@utility gloss {
+  box-shadow: var(--gloss);
+}
+
+/* The chunky handheld that frames the player. */
+@utility device {
+  background: var(--story);
+  box-shadow: var(--device-shade);
+}
+
+@utility dither-dots {
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--ink) 55%, transparent) 1px, transparent 1.3px) 0 0 /
+      var(--dither) var(--dither),
+    var(--paper);
+}
+
+@utility scanlines {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--paper) 12%, transparent) 0 1px,
+      transparent 1px var(--dither)
+    ),
+    var(--ink);
 }
 
 @utility duration-media-* {
