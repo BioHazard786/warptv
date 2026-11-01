@@ -43,7 +43,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('original')
 
   useEffect(() => {
-    setThemeState(storedTheme())
+    const stored = storedTheme()
+    setThemeState(stored)
+    apply(stored)
   }, [])
 
   const setTheme = useCallback((next: Theme) => {
