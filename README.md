@@ -1,5 +1,7 @@
 # WarpTV
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2f377af8-3096-4a6d-8474-d637aad50644/deploy-status)](https://app.netlify.com/projects/warptv/deploys)
+
 A local-first web app for browsing and watching the free live TV channels in the
 [iptv-org](https://github.com/iptv-org/api) catalog.
 
