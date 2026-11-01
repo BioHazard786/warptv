@@ -34,10 +34,17 @@ bun run build
 
 ## Deploying
 
-The app is configured for Netlify using `@netlify/vite-plugin-tanstack-start` with build output to `dist/client`.
+The app builds with [Nitro](https://nitro.build), which picks the right preset on Netlify and
+Vercel automatically. Pages are client rendered, but every route is served by the Nitro server
+(it returns the prerendered SPA shell, then the client router takes over), so deep links like
+`/channels/abc` work without any rewrite rules. Use a server-capable target, not plain static hosting.
 
-Without the proxy it needs no server logic, so any host works. Pages are client rendered and
-the server only serves the shell for every route.
+| Host            | Setup                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| Netlify         | Auto-detected. `netlify.toml` sets build `vite build`, publish `dist`.                     |
+| Vercel          | Auto-detected. Framework preset "Other", default build command.                            |
+| Cloudflare      | Build with `NITRO_PRESET=cloudflare_module bun run build`, deploy with `npx wrangler deploy --config .output/server/wrangler.json`. |
+| VPS / Docker    | `bun run build`, then `bun run start` (`PORT` env, default 3000). Put nginx/Caddy in front. |
 
 ### Stream proxy (optional)
 

@@ -12,5 +12,7 @@ dist-ssr
 __unconfig*
 todos.json
 
-# Local Netlify folder
+# Nitro / host build output
+.output
 .netlify
+.vercel
