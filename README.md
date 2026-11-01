@@ -34,8 +34,7 @@ bun run build
 
 ## Deploying
 
-The app builds with Nitro, which picks the right preset on Netlify and Vercel automatically.
-For Cloudflare Workers set `NITRO_PRESET=cloudflare_module` and enable the `nodejs_compat` flag.
+The app is configured for Netlify using `@netlify/vite-plugin-tanstack-start` with build output to `dist/client`.
 
 Without the proxy it needs no server logic, so any host works. Pages are client rendered and
 the server only serves the shell for every route.
