@@ -11,8 +11,31 @@ import type {
   RawStream,
   Region,
   StreamRow,
+  StreamHealthFile,
   Subdivision,
 } from './types'
+
+export const BASE = 'https://iptv-org.github.io/api'
+
+/** jsDelivr, because raw.githubusercontent.com has no CDN and rate limits heavy use. */
+export const HEALTH_URL =
+  'https://cdn.jsdelivr.net/gh/BioHazard786/warptv@stream-health/health.json'
+
+export const files = [
+  'channels',
+  'feeds',
+  'logos',
+  'streams',
+  'blocklist',
+  'countries',
+  'categories',
+  'languages',
+  'regions',
+  'subdivisions',
+] as const
+
+/** A stream is hidden after this many failed probes in a row, so one bad night doesn't hide it. */
+export const MAX_FAILS = 2
 
 export interface RawCatalog {
   channels: RawChannel[]
@@ -71,15 +94,19 @@ function pickLogos(logos: RawLogo[]) {
   return urls
 }
 
-export function buildCatalog(raw: RawCatalog): BuiltCatalog {
+export function buildCatalog(raw: RawCatalog, health?: StreamHealthFile | null): BuiltCatalog {
   const blocked = new Set(raw.blocklist.map((b) => b.channel))
+  // Streams of channels that shut down or moved are dead weight, the channel then reads as unplayable.
+  const gone = new Set(raw.channels.filter((c) => c.closed || c.replaced_by).map((c) => c.id))
+  const verified = new Set(health?.ok)
   const logos = pickLogos(raw.logos)
 
   const streams: StreamRow[] = []
   const streamsByChannel = new Map<string, StreamRow[]>()
   for (const s of raw.streams) {
     // Streams the database couldn't match to a channel have nothing to attach to.
-    if (!s.channel || blocked.has(s.channel)) continue
+    if (!s.channel || blocked.has(s.channel) || gone.has(s.channel)) continue
+    if ((health?.failed[s.url] ?? 0) >= MAX_FAILS) continue
     const row: StreamRow = {
       channel: s.channel,
       feed: s.feed,
@@ -94,6 +121,7 @@ export function buildCatalog(raw: RawCatalog): BuiltCatalog {
       kind: /\.mpd(\?|$)/i.test(s.url) ? 'dash' : 'hls',
       insecure: s.url.startsWith('http:'),
       needsHeaders: Boolean(s.referrer || s.user_agent),
+      verified: verified.has(s.url),
     }
     streams.push(row)
     const list = streamsByChannel.get(s.channel)

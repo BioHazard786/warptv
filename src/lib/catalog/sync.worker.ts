@@ -1,23 +1,9 @@
 /// <reference lib="webworker" />
 import type { Table } from 'dexie'
-import { buildCatalog } from './build'
+import { BASE, HEALTH_URL, buildCatalog, files } from './build'
 import type { RawCatalog } from './build'
 import { catalogTables, db } from './db'
-
-const BASE = 'https://iptv-org.github.io/api'
-
-const files = [
-  'channels',
-  'feeds',
-  'logos',
-  'streams',
-  'blocklist',
-  'countries',
-  'categories',
-  'languages',
-  'regions',
-  'subdivisions',
-] as const
+import type { StreamHealthFile } from './types'
 
 export type SyncRequest = { type: 'sync'; force: boolean }
 export type SyncMessage =
@@ -75,7 +61,11 @@ async function run(force: boolean) {
   )
 
   post({ type: 'progress', value: 72, stage: 'Indexing channels' })
-  const built = buildCatalog(raw as unknown as RawCatalog)
+  // Optional: without it every stream is kept and none is marked verified.
+  const health = await fetch(HEALTH_URL)
+    .then((res) => (res.ok ? (res.json() as Promise<StreamHealthFile>) : null))
+    .catch(() => null)
+  const built = buildCatalog(raw as unknown as RawCatalog, health)
 
   post({ type: 'progress', value: 80, stage: 'Saving to your device' })
   const tables = catalogTables.map((name) => db[name] as Table)

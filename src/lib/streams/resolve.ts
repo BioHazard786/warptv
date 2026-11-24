@@ -50,6 +50,8 @@ export function rankStreams(streams: StreamRow[], health: HealthMap, useProxy: b
       (via === 'unavailable' ? -1000 : 0) +
       (hasRecentFailure(record) ? -500 : 0) +
       (record?.status === 'ok' ? 50 : 0) +
+      // The daily probe, weaker than what this device saw itself.
+      (stream.verified ? 40 : 0) +
       (stream.geoBlocked ? -20 : 0) +
       (stream.not247 ? -10 : 0) +
       stream.height / 100

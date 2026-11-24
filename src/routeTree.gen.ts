@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AddonRouteImport } from './routes/addon'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as CountriesRouteImport } from './routes/countries'
 import { Route as FavoritesRouteImport } from './routes/favorites'
@@ -19,10 +20,16 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ApiProxyRouteImport } from './routes/api/proxy'
 import { Route as ChannelsIndexRouteImport } from './routes/channels.index'
 import { Route as ChannelsChannelIdRouteImport } from './routes/channels.$channelId'
+import { Route as StremioSplatRouteImport } from './routes/stremio/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddonRoute = AddonRouteImport.update({
+  id: '/addon',
+  path: '/addon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesRoute = CategoriesRouteImport.update({
@@ -70,9 +77,15 @@ const ChannelsChannelIdRoute = ChannelsChannelIdRouteImport.update({
   path: '/channels/$channelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StremioSplatRoute = StremioSplatRouteImport.update({
+  id: '/stremio/$',
+  path: '/stremio/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/addon': typeof AddonRoute
   '/categories': typeof CategoriesRoute
   '/countries': typeof CountriesRoute
   '/favorites': typeof FavoritesRoute
@@ -81,10 +94,12 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/api/proxy': typeof ApiProxyRoute
   '/channels/$channelId': typeof ChannelsChannelIdRoute
+  '/stremio/$': typeof StremioSplatRoute
   '/channels/': typeof ChannelsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/addon': typeof AddonRoute
   '/categories': typeof CategoriesRoute
   '/countries': typeof CountriesRoute
   '/favorites': typeof FavoritesRoute
@@ -93,11 +108,13 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/api/proxy': typeof ApiProxyRoute
   '/channels/$channelId': typeof ChannelsChannelIdRoute
+  '/stremio/$': typeof StremioSplatRoute
   '/channels': typeof ChannelsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/addon': typeof AddonRoute
   '/categories': typeof CategoriesRoute
   '/countries': typeof CountriesRoute
   '/favorites': typeof FavoritesRoute
@@ -106,12 +123,14 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/api/proxy': typeof ApiProxyRoute
   '/channels/$channelId': typeof ChannelsChannelIdRoute
+  '/stremio/$': typeof StremioSplatRoute
   '/channels/': typeof ChannelsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/addon'
     | '/categories'
     | '/countries'
     | '/favorites'
@@ -120,10 +139,12 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/proxy'
     | '/channels/$channelId'
+    | '/stremio/$'
     | '/channels/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/addon'
     | '/categories'
     | '/countries'
     | '/favorites'
@@ -132,10 +153,12 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/proxy'
     | '/channels/$channelId'
+    | '/stremio/$'
     | '/channels'
   id:
     | '__root__'
     | '/'
+    | '/addon'
     | '/categories'
     | '/countries'
     | '/favorites'
@@ -144,11 +167,13 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/proxy'
     | '/channels/$channelId'
+    | '/stremio/$'
     | '/channels/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddonRoute: typeof AddonRoute
   CategoriesRoute: typeof CategoriesRoute
   CountriesRoute: typeof CountriesRoute
   FavoritesRoute: typeof FavoritesRoute
@@ -157,6 +182,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   ApiProxyRoute: typeof ApiProxyRoute
   ChannelsChannelIdRoute: typeof ChannelsChannelIdRoute
+  StremioSplatRoute: typeof StremioSplatRoute
   ChannelsIndexRoute: typeof ChannelsIndexRoute
 }
 
@@ -167,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/addon': {
+      id: '/addon'
+      path: '/addon'
+      fullPath: '/addon'
+      preLoaderRoute: typeof AddonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories': {
@@ -232,11 +265,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChannelsChannelIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stremio/$': {
+      id: '/stremio/$'
+      path: '/stremio/$'
+      fullPath: '/stremio/$'
+      preLoaderRoute: typeof StremioSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddonRoute: AddonRoute,
   CategoriesRoute: CategoriesRoute,
   CountriesRoute: CountriesRoute,
   FavoritesRoute: FavoritesRoute,
@@ -245,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   ApiProxyRoute: ApiProxyRoute,
   ChannelsChannelIdRoute: ChannelsChannelIdRoute,
+  StremioSplatRoute: StremioSplatRoute,
   ChannelsIndexRoute: ChannelsIndexRoute,
 }
 export const routeTree = rootRouteImport

@@ -63,6 +63,30 @@ rewriting a playlist), refuses private network addresses, and streams segments t
 It counts against your host's bandwidth and function limits, so it is opt-in. Without it these
 streams show "Copy URL" and "Open in VLC" instead.
 
+## Stremio addon
+
+WarpTV is also a [Stremio](https://www.stremio.com) addon for live TV. Open `/addon` on your
+deployment, pick your countries, genres (Sports, News, ...), minimum quality and install. Only the rows
+you picked show up in Stremio, in the order you picked them. Search still finds channels from every
+country. The addon is served by the same server as the app, from `/stremio/{config}/manifest.json`,
+and responses are CDN cacheable because the config lives in the URL.
+
+Streams that need a Referer or User-Agent carry `behaviorHints.proxyHeaders`, so Stremio's own players
+send them and the stream proxy isn't needed.
+
+### Dead stream filtering
+
+`.github/workflows/probe-streams.yml` probes every stream once a day (about 10 minutes, free on a public
+repo) and force-pushes `health.json` to the `stream-health` branch. A stream that fails twice in a row is
+hidden from the addon and the app, and streams that answered are ranked first. Blocked answers (403, 451)
+count as unknown, never dead, because the runner is in the US and many streams are regional.
+
+| Variable            | Where   | Purpose                                                          |
+| ------------------- | ------- | ---------------------------------------------------------------- |
+| `STREAM_HEALTH_URL` | server  | Override the health file (default: jsDelivr of `stream-health`)  |
+
+Run it by hand with `bun scripts/probe-streams.ts --limit 200`, and the tests with `bun test`.
+
 ## Disclaimer
 
 WarpTV does not own, produce, host, archive, or distribute any of the video content, streams, or television broadcasts accessible through this application. All channel data, logos, and stream links are sourced directly from the public, community-maintained [iptv-org](https://github.com/iptv-org/iptv) project.

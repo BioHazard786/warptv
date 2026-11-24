@@ -136,6 +136,8 @@ export interface StreamRow {
   insecure: boolean
   /** The stream needs a Referer or User-Agent a browser can't send */
   needsHeaders: boolean
+  /** The daily probe got a playlist back from it */
+  verified: boolean
 }
 
 export interface FavoriteRow {
@@ -161,4 +163,13 @@ export interface StreamHealthRow {
 export interface MetaRow {
   key: string
   value: unknown
+}
+
+/** Written daily by scripts/probe-streams.ts. Streams it couldn't judge are in neither list. */
+export interface StreamHealthFile {
+  checkedAt: number
+  /** URLs that answered with a playlist in the latest probe */
+  ok: string[]
+  /** URLs that failed, with how many probes in a row */
+  failed: Record<string, number>
 }

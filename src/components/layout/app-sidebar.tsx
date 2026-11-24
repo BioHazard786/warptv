@@ -21,6 +21,7 @@ import {
   IconHistory,
   IconHome,
   IconLanguage,
+  IconPuzzle,
   IconRefresh,
   IconSettings,
   IconTags,
@@ -40,6 +41,7 @@ const browse = [
 const library = [
   { to: "/favorites", label: "Faves", icon: IconHeart },
   { to: "/history", label: "Watched", icon: IconHistory },
+  { to: "/addon", label: "Stremio", icon: IconPuzzle },
   { to: "/settings", label: "Settings", icon: IconSettings },
 ] as const;
 

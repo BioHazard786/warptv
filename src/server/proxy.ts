@@ -52,7 +52,7 @@ function safeEqual(a: string, b: string) {
 }
 
 /** Refuses anything that isn't a public http(s) host, so a hostile playlist can't reach our network. */
-function isPublicHttpUrl(value: string) {
+export function isPublicHttpUrl(value: string) {
   let url: URL
   try {
     url = new URL(value)
