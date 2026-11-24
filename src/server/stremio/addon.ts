@@ -38,7 +38,7 @@ const flag = (catalog: ServerCatalog, code: string) => {
   return country ? `${country.flag} ${country.name}` : code
 }
 
-function manifest(catalog: ServerCatalog, config: AddonConfig | null) {
+function manifest(catalog: ServerCatalog, config: AddonConfig | null, origin: string) {
   const genres = config?.genres.filter((g) => catalog.categoryById.has(g)) ?? []
   const countryNames = (config?.countries ?? [])
     .map((code) => catalog.countryByCode.get(code)?.name)
@@ -47,6 +47,7 @@ function manifest(catalog: ServerCatalog, config: AddonConfig | null) {
     id: 'tv.warptv',
     version: '1.0.0',
     name: 'WarpTV',
+    logo: `${origin}/web-app-manifest-512x512.png`,
     description:
       'Live TV that only shows what you picked: your countries and genres, with dead streams filtered out daily.',
     resources: ['catalog', 'meta', 'stream'],
@@ -187,7 +188,7 @@ export async function handleStremio(
     return json({ error: 'The channel catalog is unavailable, try again shortly' }, 502)
   }
 
-  if (path[0] === 'manifest.json') return json(manifest(catalog, config))
+  if (path[0] === 'manifest.json') return json(manifest(catalog, config, origin))
   if (!config) return json({ error: 'Not found' }, 404)
 
   const last = path.at(-1)?.replace(/\.json$/, '')

@@ -103,6 +103,7 @@ test('the manifest has one row per picked genre, in order, plus a search-only on
   const { body } = await get(`${cfg({ genres: ['news', 'sports', 'ghost'] })}/manifest.json`)
   assert.deepEqual(body.catalogs.map((c: { id: string }) => c.id), ['warptv-news', 'warptv-sports', 'warptv-search'])
   assert.equal(body.behaviorHints.configurationRequired, false)
+  assert.equal(body.logo, 'https://warp.test/web-app-manifest-512x512.png')
   assert.equal(body.catalogs.at(-1).extra[0].isRequired, true)
   // One country needs no country dropdown.
   assert.ok(!body.catalogs[0].extra.some((e: { name: string }) => e.name === 'country'))
